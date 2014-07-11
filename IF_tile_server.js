@@ -57,8 +57,8 @@ var se_loc_lat = 40.7428;
 var tempIMG = './tilers_tools/map_to_tiles2.png';
 
 //use same name for vrt
-var tempVRT = './map_vrts/newtesting3.vrt';
-var tempVRT2 = './map_vrts/newtesting4.vrt';
+var tempVRT = './map_vrts/newtesting5.vrt';
+var tempVRT2 = './map_vrts/newtesting6.vrt';
 
 var exec = require('child_process').exec;
 exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ tempIMG +' '+ tempVRT + '', function(err, stdout, stderr) {
@@ -72,12 +72,12 @@ exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixe
 		console.log(stdout2);
 
 
-		exec('gdal2tiles.py -k -n -t '+mapName+' -c '+copyright+' '+tempVRT2+'', function(err3, stdout3, stderr3) {
+		// exec('gdal2tiles.py -k -n -t '+mapName+' -c '+copyright+' '+tempVRT2+'', function(err3, stdout3, stderr3) {
 
-			console.log(stderr3);
-			console.log(stdout3);
+		// 	console.log(stderr3);
+		// 	console.log(stdout3);
 
-		});
+		// });
 
 	});
 });
