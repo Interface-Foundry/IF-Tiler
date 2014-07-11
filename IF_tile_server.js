@@ -71,7 +71,7 @@ exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixe
 		console.log(stdout2);
 
 
-		exec('gdal2tiles.py -k -n -t '+mapName+' -c '+copright+' '+tempVRT+'', function(err3, stdout3, stderr3) {
+		exec('gdal2tiles.py -k -n -t '+mapName+' -c '+copyright+' '+tempVRT+'', function(err3, stdout3, stderr3) {
 
 			console.log(stderr3);
 			console.log(stdout3);
