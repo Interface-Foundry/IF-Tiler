@@ -18,11 +18,50 @@ var app = express();
 
 var sys = require('sys')
 var exec = require('child_process').exec;
-function puts(error, stdout, stderr) { sys.puts(stdout) }
-exec("gdal_translate -of VRT -a_srs EPSG:4326 -gcp 0 0 -73.99749 40.75683 -gcp 0 10000 -73.99749 40.7428 -gcp 9529 0 -73.98472 40.75683 -gcp 9529 10000 -73.98472 40.7428 ./tilers_tools/map_to_tiles2.png ./map_vrts/newtesting2.vrt", puts, function(res){
-	console.log(res);
-});
 
+// function puts(error, stdout, stderr) { sys.puts(stdout) }
+// exec("gdal_translate -of VRT -a_srs EPSG:4326 -gcp 0 0 -73.99749 40.75683 -gcp 0 10000 -73.99749 40.7428 -gcp 9529 0 -73.98472 40.75683 -gcp 9529 10000 -73.98472 40.7428 ./tilers_tools/map_to_tiles2.png ./map_vrts/newtesting2.vrt", puts, function(res){
+// 	console.log(res);
+
+
+// });
+
+var nw_pixel_lng = 0;
+var nw_pixel_lat = 0;
+var nw_loc_lng = -73.99749;
+var nw_loc_lat = 40.75683;
+
+var sw_pixel_lng = 0;
+var sw_pixel_lat = 10000;
+var sw_loc_lng = -73.99749;
+var sw_loc_lat = 40.7428;
+
+var ne_pixel_lng = 9529;
+var ne_pixel_lat = 0;
+var ne_loc_lng = -73.98472;
+var ne_loc_lat = 40.75683;
+
+var se_pixel_lng = 9529;
+var se_pixel_lat = 10000;
+var se_loc_lng = -73.98472;
+var se_loc_lat = 40.7428;
+
+var tempIMG = './tilers_tools/map_to_tiles2.png';
+var tempVRT = './map_vrts/newtesting2.vrt';
+
+
+
+var exec = require('child_process').exec;
+exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ tempIMG +' '+ tempVRT + '', function(err, stdout, stderr) {
+	// React to callback
+	console.log(stderr);
+	console.log(stdout);
+	// exec('SOME OTHER COMMAND', function(err2, stdout2, stderr2) {
+	// 	// More reacting
+
+	// 	// ... more nesting that isn't desired
+	// });
+});
 
 
 
