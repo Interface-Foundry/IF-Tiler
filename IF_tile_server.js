@@ -26,6 +26,13 @@ var exec = require('child_process').exec;
 
 // });
 
+// pull in image with coordinates
+// measure image size
+// plugin here:
+
+var copyright = 'Interface Foundry PBC';
+var mapName = 'incoming';
+
 var nw_pixel_lng = 0;
 var nw_pixel_lat = 0;
 var nw_loc_lng = -73.99749;
@@ -46,21 +53,32 @@ var se_pixel_lat = 10000;
 var se_loc_lng = -73.98472;
 var se_loc_lat = 40.7428;
 
+//generate unique temp image path hash
 var tempIMG = './tilers_tools/map_to_tiles2.png';
+
+//use same name for vrt
 var tempVRT = './map_vrts/newtesting2.vrt';
-
-
 
 var exec = require('child_process').exec;
 exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ tempIMG +' '+ tempVRT + '', function(err, stdout, stderr) {
 	// React to callback
 	console.log(stderr);
 	console.log(stdout);
-	// exec('SOME OTHER COMMAND', function(err2, stdout2, stderr2) {
-	// 	// More reacting
 
-	// 	// ... more nesting that isn't desired
-	// });
+	exec('gdalwarp -of VRT -t_srs EPSG:4326 '+tempVRT+' '+tempVRT+'', function(err2, stdout2, stderr2) {
+
+		console.log(stderr2);
+		console.log(stdout2);
+
+
+		exec('gdal2tiles.py -k -n -t '+mapName+' -c '+copright+' '+tempVRT+'', function(err3, stdout3, stderr3) {
+
+			console.log(stderr3);
+			console.log(stdout3);
+
+		});
+
+	});
 });
 
 
