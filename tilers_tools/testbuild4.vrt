@@ -1,0 +1,56 @@
+<VRTDataset rasterXSize="9298" rasterYSize="10215" subClass="VRTWarpedDataset">
+  <SRS>GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]</SRS>
+  <GeoTransform> -7.3997489999999985e+01,  1.3734345525044812e-06,  0.0000000000000000e+00,  4.0756830000000001e+01,  0.0000000000000000e+00, -1.3734345525044812e-06</GeoTransform>
+  <VRTRasterBand dataType="Byte" band="1" subClass="VRTWarpedRasterBand">
+    <ColorInterp>Red</ColorInterp>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Byte" band="2" subClass="VRTWarpedRasterBand">
+    <ColorInterp>Green</ColorInterp>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Byte" band="3" subClass="VRTWarpedRasterBand">
+    <ColorInterp>Blue</ColorInterp>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Byte" band="4" subClass="VRTWarpedRasterBand">
+    <ColorInterp>Alpha</ColorInterp>
+  </VRTRasterBand>
+  <BlockXSize>512</BlockXSize>
+  <BlockYSize>128</BlockYSize>
+  <GDALWarpOptions>
+    <WarpMemoryLimit>6.71089e+07</WarpMemoryLimit>
+    <ResampleAlg>NearestNeighbour</ResampleAlg>
+    <WorkingDataType>Byte</WorkingDataType>
+    <Option name="INIT_DEST">0</Option>
+    <Option name="EXTRA_ELTS">1</Option>
+    <SourceDataset relativeToVRT="1">testbuild.vrt</SourceDataset>
+    <Transformer>
+      <ApproxTransformer>
+        <MaxError>0.125</MaxError>
+        <BaseTransformer>
+          <GenImgProjTransformer>
+            <SrcGCPTransformer>
+              <GCPTransformer>
+                <Order>1</Order>
+                <Reversed>0</Reversed>
+                <GCPList>
+                  <GCP Id="" Pixel="0.0000" Line="0.0000" X="-7.399749000000E+01" Y="4.075683000000E+01" />
+                  <GCP Id="" Pixel="0.0000" Line="10000.0000" X="-7.399749000000E+01" Y="4.074280000000E+01" />
+                  <GCP Id="" Pixel="9529.0000" Line="0.0000" X="-7.398472000000E+01" Y="4.075683000000E+01" />
+                  <GCP Id="" Pixel="9529.0000" Line="10000.0000" X="-7.398472000000E+01" Y="4.074280000000E+01" />
+                </GCPList>
+              </GCPTransformer>
+            </SrcGCPTransformer>
+            <DstGeoTransform>-73.9974899999999849,1.37343455250448121e-06,0,40.7568300000000008,0,-1.37343455250448121e-06</DstGeoTransform>
+            <DstInvGeoTransform>53877696.5127783567,728101.676324134343,0,29675116.2446577698,0,-728101.676324134343</DstInvGeoTransform>
+          </GenImgProjTransformer>
+        </BaseTransformer>
+      </ApproxTransformer>
+    </Transformer>
+    <BandList>
+      <BandMapping src="1" dst="1" />
+      <BandMapping src="2" dst="2" />
+      <BandMapping src="3" dst="3" />
+    </BandList>
+    <SrcAlphaBand>4</SrcAlphaBand>
+    <DstAlphaBand>4</DstAlphaBand>
+  </GDALWarpOptions>
+</VRTDataset>
