@@ -136,124 +136,73 @@ app.post('/api/upload', function (req, res) {
 			// 	});
 			// });  
 
-
 		}
-
-
-
-
-
-	function saveImage(req, callback){
-
-	      var fstream;
-	        req.pipe(req.busboy);
-
-	        req.busboy.on('file', function (fieldname, file, filename) {
-
-	            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	            var fileType = filename.split('.').pop();
-
-	            while (1) {
-
-	                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
-	                var fileNumber_str = fileNumber.toString(); 
-	                var current = fileNumber_str + '.' + fileType;
-
-	                //checking for existing file, if unique, write to dir
-	                if (fs.existsSync("temp_img_uploads/" + current)) {
-	                    continue; //if there are max # of files in the dir this will infinite loop...
-	                } 
-	                else {
-
-	                    var newPath = "temp_img_uploads/" + current;
-
-	                    fstream = fs.createWriteStream(newPath);
-	                    file.pipe(fstream);
-	                    fstream.on('close', function () {
-	                         im.crop({
-	                          srcPath: newPath,
-	                          dstPath: newPath,
-	                          width: 100,
-	                          height: 100,
-	                          quality: 85,
-	                          gravity: "Center"
-	                        }, function(err, stdout, stderr){
-
-	                            //res.send("uploads/"+current);
-	                            callback(current);
-
-	                        });                       
-	                    });
-
-	                    break;
-	                }
-	            }
-
-	        });
-
-	}
-
-
-
 	
+
+});
+
+
+
+
+function saveImage(req, callback){
+
+      var fstream;
+        req.pipe(req.busboy);
+
+        req.busboy.on('file', function (fieldname, file, filename) {
+
+            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+            var fileType = filename.split('.').pop();
+
+            while (1) {
+
+                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
+                var fileNumber_str = fileNumber.toString(); 
+                var current = fileNumber_str + '.' + fileType;
+
+                //checking for existing file, if unique, write to dir
+                if (fs.existsSync("temp_img_uploads/" + current)) {
+                    continue; //if there are max # of files in the dir this will infinite loop...
+                } 
+                else {
+
+                    var newPath = "temp_img_uploads/" + current;
+
+                    fstream = fs.createWriteStream(newPath);
+                    file.pipe(fstream);
+                    fstream.on('close', function () {
+                         im.crop({
+                          srcPath: newPath,
+                          dstPath: newPath,
+                          width: 100,
+                          height: 100,
+                          quality: 85,
+                          gravity: "Center"
+                        }, function(err, stdout, stderr){
+
+                            //res.send("uploads/"+current);
+                            callback(current);
+
+                        });                       
+                    });
+
+                    break;
+                }
+            }
+
+        });
 
 }
 
 
+app.listen(3000, function() {
+    console.log("Illya casting tile build! on 3000 ~ ~ ♡");
+});
 
 
 
 
 
 
-    //disabled Max image upload size for NOW << enable later...
-   // if (req.files.files[0].size <= 5242880){
-
-	// SET FILE SIZE LIMIT HERE 
-	//FILTER ANYTHING BUT GIF JPG PNG
 
 
-
-
-
-  
-
-
-
-
-
-
-// app.post('/upload', function(req, res){
-   // if(req.files.myUpload){
-//      var python = require('child_process').spawn(
-// 	     'python',
-// 	     // second argument is array of parameters, e.g.:
-// 	     ["/home/me/pythonScript.py", parameters]
-//      );
-//      var output = "";
-//      python.stdout.on('data', function(){ output += data });
-//      python.on('close', function(code){ 
-//        if (code !== 0) {  return 
-//        	//res.send(500, code); 
-//        	console.log(code);
-//        }
-//        return res.send(200, output)
-//      });
-// //    } else { res.send(500, 'No file found') }
-// // });
-
-
-
-     // var python = require('child_process').spawn(
-     // 'python',
-     // // second argument is array of parameters, e.g.:
-     // ["/home/me/pythonScript.py"
-     // , req.files.myUpload.path
-     // , req.files.myUpload.type]
-     // );
-     // var output = "";
-     // python.stdout.on('data', function(){ output += data });
-     // python.on('close', function(code){ 
-     //   if (code !== 0) {  return res.send(500, code); }
-     //   return res.send(200, output)
-     // });
