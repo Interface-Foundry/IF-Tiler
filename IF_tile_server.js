@@ -95,7 +95,7 @@ var exec = require('child_process').exec;
 
 app.post('/api/upload', function (req, res) {
 	
-
+	console.log('asdf334');
 	// buildMap();
 
 	// function buildMap(){
