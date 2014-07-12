@@ -242,9 +242,7 @@ app.post('/api/upload', function (req, res) {
 // //    } else { res.send(500, 'No file found') }
 // // });
 
-app.listen(3000, function() {
-    console.log("Illya casting tile build! on 3000 ~ ~ ♡");
-});
+
 
      // var python = require('child_process').spawn(
      // 'python',
