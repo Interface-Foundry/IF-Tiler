@@ -96,9 +96,9 @@ var exec = require('child_process').exec;
 app.post('/api/upload', function (req, res) {
 	
 
-	buildMap();
+	// buildMap();
 
-	function buildMap(req,res){
+	// function buildMap(){
 
 
 		saveImage(req, gotImageID);
@@ -141,7 +141,61 @@ app.post('/api/upload', function (req, res) {
 
 
 
+
+
+	function saveImage(req, callback){
+
+	      var fstream;
+	        req.pipe(req.busboy);
+
+	        req.busboy.on('file', function (fieldname, file, filename) {
+
+	            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+	            var fileType = filename.split('.').pop();
+
+	            while (1) {
+
+	                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
+	                var fileNumber_str = fileNumber.toString(); 
+	                var current = fileNumber_str + '.' + fileType;
+
+	                //checking for existing file, if unique, write to dir
+	                if (fs.existsSync("temp_img_uploads/" + current)) {
+	                    continue; //if there are max # of files in the dir this will infinite loop...
+	                } 
+	                else {
+
+	                    var newPath = "temp_img_uploads/" + current;
+
+	                    fstream = fs.createWriteStream(newPath);
+	                    file.pipe(fstream);
+	                    fstream.on('close', function () {
+	                         im.crop({
+	                          srcPath: newPath,
+	                          dstPath: newPath,
+	                          width: 100,
+	                          height: 100,
+	                          quality: 85,
+	                          gravity: "Center"
+	                        }, function(err, stdout, stderr){
+
+	                            //res.send("uploads/"+current);
+	                            callback(current);
+
+	                        });                       
+	                    });
+
+	                    break;
+	                }
+	            }
+
+	        });
+
 	}
+
+
+
+	
 
 }
 
@@ -161,55 +215,7 @@ app.post('/api/upload', function (req, res) {
 
 
 
-function saveImage(req, callback){
 
-      var fstream;
-        req.pipe(req.busboy);
-
-        req.busboy.on('file', function (fieldname, file, filename) {
-
-            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-            var fileType = filename.split('.').pop();
-
-            while (1) {
-
-                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
-                var fileNumber_str = fileNumber.toString(); 
-                var current = fileNumber_str + '.' + fileType;
-
-                //checking for existing file, if unique, write to dir
-                if (fs.existsSync("temp_img_uploads/" + current)) {
-                    continue; //if there are max # of files in the dir this will infinite loop...
-                } 
-                else {
-
-                    var newPath = "temp_img_uploads/" + current;
-
-                    fstream = fs.createWriteStream(newPath);
-                    file.pipe(fstream);
-                    fstream.on('close', function () {
-                         im.crop({
-                          srcPath: newPath,
-                          dstPath: newPath,
-                          width: 100,
-                          height: 100,
-                          quality: 85,
-                          gravity: "Center"
-                        }, function(err, stdout, stderr){
-
-                            //res.send("uploads/"+current);
-                            callback(current);
-
-                        });                       
-                    });
-
-                    break;
-                }
-            }
-
-        });
-
-}
   
 
 
