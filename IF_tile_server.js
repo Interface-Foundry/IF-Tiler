@@ -137,7 +137,7 @@ app.post('/api/upload', function (req, res) {
 			// });  
 
 
-		};
+		}
 
 
 
