@@ -93,13 +93,16 @@ var tempVRT2 = './maps/newtesting10.vrt';
 
 var exec = require('child_process').exec;
 
+app.post('/api/upload', function (req, res) {
+	buildMap(req, res);
+}
 
-buildMap();
-
-function buildMap(){
 
 
-	saveImage(gotImageID);
+function buildMap(req,res){
+
+
+	saveImage(req, gotImageID);
 
 
 	var gotImageID = function(data) {
@@ -135,18 +138,11 @@ function buildMap(){
 		// });  
 
 
-
 	};
 
 
 
 }
-
-
-var usingItNow = function(callback) {
-  
-};
-
 
 
 
@@ -159,9 +155,13 @@ var usingItNow = function(callback) {
     //disabled Max image upload size for NOW << enable later...
    // if (req.files.files[0].size <= 5242880){
 
-        // SET FILE SIZE LIMIT HERE 
-        //FILTER ANYTHING BUT GIF JPG PNG
-function saveImage(callback){
+	// SET FILE SIZE LIMIT HERE 
+	//FILTER ANYTHING BUT GIF JPG PNG
+
+
+
+
+function saveImage(req, callback){
 
       var fstream;
         req.pipe(req.busboy);
