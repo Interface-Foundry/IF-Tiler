@@ -146,6 +146,8 @@ app.post('/api/upload', function (req, res) {
 
 function saveImage(req, callback){
 
+		console.log('asdf');
+
       var fstream;
         req.pipe(req.busboy);
 
@@ -191,7 +193,6 @@ function saveImage(req, callback){
             }
 
         });
-
 }
 
 
