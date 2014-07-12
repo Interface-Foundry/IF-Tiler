@@ -1,16 +1,56 @@
-// var zerorpc = require("zerorpc");
 
-// var client = new zerorpc.Client();
-// client.connect("tcp://127.0.0.1:4242");
+var fs = require('fs');
+var im = require('imagemagick'); //must also install imagemagick package on server /!\
+var async = require('async');
+var moment = require('moment');
+var connectBusboy = require('connect-busboy');
 
-// client.invoke("streaming_range", 10, 20, 2, function(error, res, more) {
-//     console.log(res);
-// });
+var bodyParser = require('body-parser');
+var integers = require('./server_bubblequery/constants/integers');
+var strings = require('./server_bubblequery/constants/strings');
+var bubble = require('./server_bubblequery/handlers/bubble');
 
-var parameters = [''];
 
-var express = require('express'); 
-var app = express();
+var express = require('express'),
+    app = module.exports.app = express(),
+    db = require('mongojs').connect('if');
+
+    app.use(express.static(__dirname + '/app'));
+
+
+    //===== PASSPORT =====//
+    // set up our express application
+    app.use(morgan('dev')); // log every request to the console
+    app.use(cookieParser()); // read cookies (needed for auth)
+
+    app.use(bodyParser.urlencoded({
+      extended: true
+    })); // get information from html forms
+
+    app.use(bodyParser.json({
+      extended: true
+    })); // get information from html forms
+
+
+    app.set('view engine', 'ejs'); // set up ejs for templating
+
+    // required for passport
+    app.use(session({ secret: 'rachelwantstomakecakebutneedseggs' })); // session secret to 'prevent' session hijacking 
+    app.use(passport.initialize());
+    app.use(passport.session()); // persistent login sessions
+    app.use(flash()); // use connect-flash for flash messages stored in session
+
+    //===================//
+
+app.use(connectBusboy());
+
+
+
+
+// var parameters = [''];
+
+// var express = require('express'); 
+// var app = express();
 // app.use(express.logger('dev'));
 // app.use(express.bodyParser());
 // app.use(app.router);
@@ -62,40 +102,66 @@ var tempVRT2 = './maps/newtesting10.vrt';
 
 var exec = require('child_process').exec;
 
-// //build VRT file from image pixels && location coordinates
-// exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ tempIMG +' '+ tempVRT + '', function(err, stdout, stderr) {
-// 	// React to callback
-// 	console.log(stderr);
-// 	console.log(stdout);
 
-// 	//warp VRT to earth curvature
-// 	exec('gdalwarp -of VRT -t_srs EPSG:4326 '+tempVRT+' '+tempVRT2+'', function(err2, stdout2, stderr2) { 
+buildMap();
 
-// 		console.log(stderr2);
-// 		console.log(stdout2);
+function buildMap(){
 
-// 		//build tiles from warped VRT 
-// 		exec('gdal2tiles.py -k -n -w none '+tempVRT2+'', function(err3, stdout3, stderr3) {
 
-// 			console.log(stderr3);
-// 			console.log(stdout3);
+	saveImage(imageID);
 
-// 			//delete temp img and vrt
 
-// 		});
+	var gotImageID = function(data) {
+	  console.log('got data: '+data);
 
-// 	});
-// });
+	  //SEND BACK TO IF-root
 
-var myCallback = function(data) {
-  console.log('got data: '+data);
-};
+		// //build VRT file from image pixels && location coordinates
+		// exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ tempIMG +' '+ tempVRT + '', function(err, stdout, stderr) {
+		// 	// React to callback
+		// 	console.log(stderr);
+		// 	console.log(stdout);
+
+		// 	//warp VRT to earth curvature
+		// 	exec('gdalwarp -of VRT -t_srs EPSG:4326 '+tempVRT+' '+tempVRT2+'', function(err2, stdout2, stderr2) { 
+
+		// 		console.log(stderr2);
+		// 		console.log(stdout2);
+
+		// 		//build tiles from warped VRT 
+
+		// 		//add in -w none
+		// 		exec('gdal2tiles.py -k -n '+tempVRT2+'', function(err3, stdout3, stderr3) {
+
+		// 			console.log(stderr3);
+		// 			console.log(stdout3);
+
+		// 			//delete temp img and vrt
+
+		// 		});
+
+		// 	});
+		// });  
+
+
+
+	};
+
+
+
+}
+
 
 var usingItNow = function(callback) {
-  callback('get it?');
+  
 };
 
-usingItNow(myCallback);
+
+
+
+
+
+
 
 
 
@@ -121,12 +187,12 @@ function saveImage(callback){
                 var current = fileNumber_str + '.' + fileType;
 
                 //checking for existing file, if unique, write to dir
-                if (fs.existsSync("app/uploads/" + current)) {
+                if (fs.existsSync("temp_img_uploads/" + current)) {
                     continue; //if there are max # of files in the dir this will infinite loop...
                 } 
                 else {
 
-                    var newPath = "app/uploads/" + current;
+                    var newPath = "temp_img_uploads/" + current;
 
                     fstream = fs.createWriteStream(newPath);
                     file.pipe(fstream);
@@ -141,7 +207,7 @@ function saveImage(callback){
                         }, function(err, stdout, stderr){
 
                             //res.send("uploads/"+current);
-                            return current; 
+                            callback(current);
 
                         });                       
                     });
