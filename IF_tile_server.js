@@ -6,14 +6,9 @@ var moment = require('moment');
 var connectBusboy = require('connect-busboy');
 
 var bodyParser = require('body-parser');
-var integers = require('./server_bubblequery/constants/integers');
-var strings = require('./server_bubblequery/constants/strings');
-var bubble = require('./server_bubblequery/handlers/bubble');
-
 
 var express = require('express'),
-    app = module.exports.app = express(),
-    db = require('mongojs').connect('if');
+    app = module.exports.app = express();
 
     app.use(express.static(__dirname + '/app'));
 
@@ -21,25 +16,20 @@ var express = require('express'),
     //===== PASSPORT =====//
     // set up our express application
     app.use(morgan('dev')); // log every request to the console
-    app.use(cookieParser()); // read cookies (needed for auth)
+    // app.use(cookieParser()); // read cookies (needed for auth)
 
-    app.use(bodyParser.urlencoded({
-      extended: true
-    })); // get information from html forms
+    // app.use(bodyParser.urlencoded({
+    //   extended: true
+    // })); // get information from html forms
 
-    app.use(bodyParser.json({
-      extended: true
-    })); // get information from html forms
+    // app.use(bodyParser.json({
+    //   extended: true
+    // })); // get information from html forms
 
 
-    app.set('view engine', 'ejs'); // set up ejs for templating
 
-    // required for passport
-    app.use(session({ secret: 'rachelwantstomakecakebutneedseggs' })); // session secret to 'prevent' session hijacking 
-    app.use(passport.initialize());
-    app.use(passport.session()); // persistent login sessions
-    app.use(flash()); // use connect-flash for flash messages stored in session
 
+   
     //===================//
 
 app.use(connectBusboy());
