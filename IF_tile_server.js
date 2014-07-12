@@ -99,7 +99,7 @@ buildMap();
 function buildMap(){
 
 
-	saveImage(imageID);
+	saveImage(gotImageID);
 
 
 	var gotImageID = function(data) {
