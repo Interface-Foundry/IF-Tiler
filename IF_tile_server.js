@@ -3,6 +3,7 @@ var fs = require('fs');
 var im = require('imagemagick'); //must also install imagemagick package on server /!\
 var async = require('async');
 var moment = require('moment');
+var morgan = require('morgan');
 var connectBusboy = require('connect-busboy');
 
 var bodyParser = require('body-parser');
