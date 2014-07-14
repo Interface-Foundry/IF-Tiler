@@ -98,14 +98,13 @@ app.post('/api/upload', function (req, res) {
 	
 	//console.log('asdf334');
 
-	res.send('image received');
 	// buildMap();
 
 	// function buildMap(){
 
 
 		//saveImage(req, gotImageID);
-		saveImage(req);
+		saveImage(req, res);
 
 
 		// var gotImageID = function(data) {
@@ -148,7 +147,7 @@ app.post('/api/upload', function (req, res) {
 
 
 
-function saveImage(req){
+function saveImage(req, res){
 
 	  //console.log(req);
 
@@ -185,7 +184,9 @@ function saveImage(req){
                     fstream.on('close', function () {
                             //res.send("uploads/"+current);
                         console.log('saved image as ' +current);
-                        processImage(current);              
+                        processImage(current);   
+                        res.send('image received');
+           
                     });
 
                     break;
