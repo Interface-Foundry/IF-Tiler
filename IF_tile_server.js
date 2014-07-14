@@ -110,34 +110,9 @@ app.post('/api/upload', function (req, res) {
 		// var gotImageID = function(data) {
 		//   console.log('got data: '+data);
 
-		//   //SEND BACK TO IF-root
+		//  SEND BACK TO IF-root
 
-		// 	// //build VRT file from image pixels && location coordinates
-		// 	// exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ tempIMG +' '+ tempVRT + '', function(err, stdout, stderr) {
-		// 	// 	// React to callback
-		// 	// 	console.log(stderr);
-		// 	// 	console.log(stdout);
 
-		// 	// 	//warp VRT to earth curvature
-		// 	// 	exec('gdalwarp -of VRT -t_srs EPSG:4326 '+tempVRT+' '+tempVRT2+'', function(err2, stdout2, stderr2) { 
-
-		// 	// 		console.log(stderr2);
-		// 	// 		console.log(stdout2);
-
-		// 	// 		//build tiles from warped VRT 
-
-		// 	// 		//add in -w none
-		// 	// 		exec('gdal2tiles.py -k -n '+tempVRT2+'', function(err3, stdout3, stderr3) {
-
-		// 	// 			console.log(stderr3);
-		// 	// 			console.log(stdout3);
-
-		// 	// 			//delete temp img and vrt
-
-		// 	// 		});
-
-		// 	// 	});
-		// 	// });  
 
 		// }
 	
@@ -149,7 +124,7 @@ app.post('/api/upload', function (req, res) {
 
 function saveImage(req, res){
 
-	  //console.log(req);
+	  console.log(req.params);
 
       var fstream;
         req.pipe(req.busboy);
@@ -160,9 +135,6 @@ function saveImage(req, res){
 
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
-
-            console.log(fileName);
-            console.log(fileType);
 
             while (1) {
 
@@ -182,10 +154,11 @@ function saveImage(req, res){
                     fstream = fs.createWriteStream(newPath);
                     file.pipe(fstream);
                     fstream.on('close', function () {
-                            //res.send("uploads/"+current);
-                        console.log('saved image as ' +current);
+                            
+                        console.log('saved image as ' + current);
+
                         processImage(current);   
-                        res.send('image received');
+                        
            
                     });
 
@@ -198,6 +171,42 @@ function saveImage(req, res){
 
 function processImage(id){
 	console.log('process '+id);
+
+
+	// //build VRT file from image pixels && location coordinates
+	// exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ tempIMG +' '+ tempVRT + '', function(err, stdout, stderr) {
+	// 	// React to callback
+	// 	console.log(stderr);
+	// 	console.log(stdout);
+
+	// 	//warp VRT to earth curvature
+	// 	exec('gdalwarp -of VRT -t_srs EPSG:4326 '+tempVRT+' '+tempVRT2+'', function(err2, stdout2, stderr2) { 
+
+	// 		console.log(stderr2);
+	// 		console.log(stdout2);
+
+	// 		//build tiles from warped VRT 
+
+	// 		//add in -w none
+	// 		exec('gdal2tiles.py -k -n '+tempVRT2+'', function(err3, stdout3, stderr3) {
+
+	// 			console.log(stderr3);
+	// 			console.log(stdout3);
+	// 			res.send('map built');
+	// 			//delete temp img and vrt
+
+	// 		});
+
+	// 	});
+	// });  
+
+
+
+	//remove temp map file
+	fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
+      if (err) throw err;
+      console.log('successfully deleted '+__dirname + '/app/temp_map_uploads/' + current);
+    });
 
 }
 
