@@ -124,7 +124,7 @@ app.post('/api/upload', function (req, res) {
 
 function saveImage(req, res){
 
-	  console.log(req.params);
+	  console.log(req);
 
       var fstream;
         req.pipe(req.busboy);
@@ -200,12 +200,14 @@ function processImage(id){
 	// 	});
 	// });  
 
+	res.send('asdf');
+
 
 
 	//remove temp map file
 	fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
       if (err) throw err;
-      console.log('successfully deleted '+__dirname + '/app/temp_map_uploads/' + current);
+      console.log('successfully deleted '+__dirname + '/temp_img_uploads/' + id);
     });
 
 }
