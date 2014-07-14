@@ -153,10 +153,16 @@ function saveImage(req, callback){
 
         req.busboy.on('file', function (fieldname, file, filename) {
 
+
+
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
 
+            console.log(fileName);
+            console.log(fileType);
+
             while (1) {
+
 
                 var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
                 var fileNumber_str = fileNumber.toString(); 
@@ -167,7 +173,7 @@ function saveImage(req, callback){
                     continue; //if there are max # of files in the dir this will infinite loop...
                 } 
                 else {
-
+                	console.log('writing new path');
                     var newPath = "temp_img_uploads/" + current;
 
                     fstream = fs.createWriteStream(newPath);
