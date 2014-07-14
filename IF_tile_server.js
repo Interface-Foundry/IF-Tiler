@@ -148,7 +148,7 @@ app.post('/api/upload', function (req, res) {
 
 
 
-function saveImage(req, callback){
+function saveImage(req){
 
 	  //console.log(req);
 
