@@ -157,7 +157,7 @@ function saveImage(req, res){
                             
                         console.log('saved image as ' + current);
 
-                        processImage(current);   
+                        processImage(current, res);   
                         
            
                     });
@@ -169,7 +169,7 @@ function saveImage(req, res){
         });
 }
 
-function processImage(id){
+function processImage(id, res){
 	console.log('process '+id);
 
 
