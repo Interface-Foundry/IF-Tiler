@@ -94,8 +94,9 @@ var tempVRT2 = './maps/newtesting10.vrt';
 var exec = require('child_process').exec;
 
 app.post('/api/upload', function (req, res) {
+
 	
-	//console.log('asdf334');
+	console.log('asdf334');
 	// buildMap();
 
 	// function buildMap(){
