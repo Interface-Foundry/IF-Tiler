@@ -146,14 +146,13 @@ app.post('/api/upload', function (req, res) {
 
 function saveImage(req, callback){
 
-	  console.log(req);
 
       var fstream;
         req.pipe(req.busboy);
 
         req.busboy.on('file', function (fieldname, file, filename) {
 
-
+        	console.log('busboy init');
 
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
