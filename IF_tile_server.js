@@ -146,6 +146,7 @@ app.post('/api/upload', function (req, res) {
 
 function saveImage(req, callback){
 
+	  console.log(req);
 
       var fstream;
         req.pipe(req.busboy);
