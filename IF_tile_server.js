@@ -112,12 +112,11 @@ app.post('/api/upload', function (req, res) {
 
   	form.parse(req);
 
-  	form
-	    .on('field', function(name, value) {
+  	form.on('field', function(name, value) {
 	      console.log('name '+name);
 	      console.log('val '+value);
-	    });
     });
+   
 
     // .on('end', function() {
     //   res.writeHead(200);
