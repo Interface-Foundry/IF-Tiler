@@ -6,18 +6,6 @@ var moment = require('moment');
 var morgan = require('morgan');
 var connectBusboy = require('connect-busboy');
 
-
-var common = require('../common');
-var assert = common.assert;
-var http = require('http');
-var path = require('path');
-var mime = require('mime');
-var request = require('request');
-var FormData = require(common.dir.lib + '/form_data');
-var IncomingForm = require('formidable').IncomingForm;
-
-
-
 var bodyParser = require('body-parser');
 
 var express = require('express'),
@@ -107,29 +95,26 @@ var exec = require('child_process').exec;
 
 app.post('/api/upload', function (req, res) {
 
-
-	var form = new IncomingForm({uploadDir: common.dir.tmp});
-
-  	form.parse(req);
-
-  	form.on('field', function(name, value) {
-	      console.log('name '+name);
-	      console.log('val '+value);
-    });
-   
-
-    // .on('end', function() {
-    //   res.writeHead(200);
-    //   res.end('done');
-    // });
-
-      res.writeHead(200);
-      res.end('done');
 	
+	//console.log('asdf334');
 
-		//saveImage(req, res);
+	// buildMap();
+
+	// function buildMap(){
 
 
+		//saveImage(req, gotImageID);
+		saveImage(req, res);
+
+
+		// var gotImageID = function(data) {
+		//   console.log('got data: '+data);
+
+		//  SEND BACK TO IF-root
+
+
+
+		// }
 	
 
 });
@@ -139,14 +124,16 @@ app.post('/api/upload', function (req, res) {
 
 function saveImage(req, res){
 
-	  console.log(req.body);
+	  //console.log(req.body);
 
       var fstream;
         req.pipe(req.busboy);
 
         req.busboy.on('file', function (fieldname, file, filename) {
 
-        	console.log('busboy init');
+        	console.log(fieldname);
+
+        	console.log(file);
 
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
