@@ -135,7 +135,7 @@ function saveImage(req, res){
 
         	var coordinates = JSON.parse(fieldname);
 
-        	console.log(coordinates);
+        	console.log(coordinates.lat);
 
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
@@ -206,7 +206,7 @@ function processImage(id, res){
 
 	res.send('asdf');
 
-
+	// IF MAP DIR ALREADY EXISTS, then DELETE AND REWRITE WITH NEW ONE
 
 	//remove temp map file
 	fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
