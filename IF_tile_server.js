@@ -194,7 +194,8 @@ function buildTiles(id,res,coordinatesString,size){
 
 	console.log('building tiles');
 
-	
+	var tempVRT = './maps/newtesting9.vrt';
+var tempVRT2 = './maps/newtesting10.vrt';
 
    	coordinatesString = coordinatesString.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
 	var coordinates = JSON.parse(coordinatesString); //incoming box coordinates
@@ -203,8 +204,9 @@ function buildTiles(id,res,coordinatesString,size){
 	console.log(coordinates);
 
 	var mapImage = 'temp_img_uploads/' + id;
-	var worldMapVRT = coordinates.worldID;
-	var	worldMapVRT2 = coordinates.worldID + '_warped';
+
+	var worldMapVRT = './maps/'+coordinates.worldID+'.vrt';
+	var	worldMapVRT2 ='./maps/'+coordinates.worldID + '_warped.vrt';
 
 	var nw_pixel_lng = 0;
 	var nw_pixel_lat = 0;
@@ -247,7 +249,7 @@ function buildTiles(id,res,coordinatesString,size){
 			//build tiles from warped VRT 
 
 			//add in -w none
-			exec('gdal2tiles.py -k -n '+worldMapVRT2+'', function(err3, stdout3, stderr3) {
+			exec('gdal2tiles.py -k -n -w none '+worldMapVRT2+'', function(err3, stdout3, stderr3) {
 
 				console.log(stderr3);
 				console.log(stdout3);
