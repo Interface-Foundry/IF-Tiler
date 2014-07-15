@@ -268,6 +268,7 @@ function buildTiles(id,res,coordinatesString,size){
 			    var mapResponse = {
 			        mapURL: coordinates.worldID + '_warped.vrt',
 			        zooms: zoomLevels,
+			        worldID: id
 			    };
 
 			    var map_text = JSON.stringify(mapResponse);
