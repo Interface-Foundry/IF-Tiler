@@ -131,8 +131,8 @@ function saveImage(req, res){
 
         req.busboy.on('file', function (fieldname, file, filename) {
 
-        	fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
-        	var coordinates = JSON.parse(fieldname); //incoming box coordinates
+        	// fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
+        	// var coordinates = JSON.parse(fieldname); //incoming box coordinates
 
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
@@ -158,7 +158,8 @@ function saveImage(req, res){
                             
                         console.log('saved image as ' + current);
 
-                        processImage(current, res, coordinates);   
+                        console.log(fieldname);
+                        processImage(current, res, fieldname);   
                         
            
                     });
@@ -189,9 +190,17 @@ function processImage(id, res, coordinates){
 
 }
 
-function buildTiles(id,res,coordinates,size){
+function buildTiles(id,res,coordinatesString,size){
 
 	console.log('building tiles');
+
+	
+
+   	coordinatesString = coordinatesString.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
+	var coordinates = JSON.parse(coordinatesString); //incoming box coordinates
+
+
+	console.log(coordinates);
 
 	var mapImage = 'temp_img_uploads/' + id;
 	var worldMapVRT = coordinates.worldID;
@@ -221,40 +230,40 @@ function buildTiles(id,res,coordinates,size){
 
 
 
-console.log('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '');
+//console.log('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '');
 	
-	// //build VRT file from image pixels && location coordinates
-	// exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '', function(err, stdout, stderr) {
-	// 	// React to callback
-	// 	console.log(stderr);
-	// 	console.log(stdout);
+	//build VRT file from image pixels && location coordinates
+	exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '', function(err, stdout, stderr) {
+		// React to callback
+		console.log(stderr);
+		console.log(stdout);
 
-	// 	//warp VRT to earth curvature
-	// 	exec('gdalwarp -of VRT -t_srs EPSG:4326 '+worldMapVRT+' '+worldMapVRT2+'', function(err2, stdout2, stderr2) { 
+		//warp VRT to earth curvature
+		exec('gdalwarp -of VRT -t_srs EPSG:4326 '+worldMapVRT+' '+worldMapVRT2+'', function(err2, stdout2, stderr2) { 
 
-	// 		console.log(stderr2);
-	// 		console.log(stdout2);
+			console.log(stderr2);
+			console.log(stdout2);
 
-	// 		//build tiles from warped VRT 
+			//build tiles from warped VRT 
 
-	// 		//add in -w none
-	// 		exec('gdal2tiles.py -k -n '+worldMapVRT2+'', function(err3, stdout3, stderr3) {
+			//add in -w none
+			exec('gdal2tiles.py -k -n '+worldMapVRT2+'', function(err3, stdout3, stderr3) {
 
-	// 			console.log(stderr3);
-	// 			console.log(stdout3);
-	// 			res.send('map '+id+' built');
-	// 			//delete temp img and vrt
+				console.log(stderr3);
+				console.log(stdout3);
+				res.send('map '+id+' built');
+				//delete temp img and vrt
 
-	// 			//remove temp map file
-	// 			fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
-	// 		      if (err) throw err;
-	// 		      console.log('successfully deleted '+__dirname + '/temp_img_uploads/' + id);
-	// 		    });
+				//remove temp map file
+				fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
+			      if (err) throw err;
+			      console.log('successfully deleted '+__dirname + '/temp_img_uploads/' + id);
+			    });
 
-	// 		});
+			});
 
-	// 	});
-	// }); 
+		});
+	}); 
 
 	// res.send('asdf');
 
