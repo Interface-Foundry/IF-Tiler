@@ -249,7 +249,7 @@ var tempVRT2 = './maps/newtesting10.vrt';
 			//build tiles from warped VRT 
 
 			//add in -w none
-			exec('gdal2tiles.py -k -n -w none '+worldMapVRT2+'', function(err3, stdout3, stderr3) {
+			exec('gdal2tiles.py -k -n -w none '+worldMapVRT2+' ./maps/', function(err3, stdout3, stderr3) {
 
 				console.log(stderr3);
 				console.log(stdout3);
