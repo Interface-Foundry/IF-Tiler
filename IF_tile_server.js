@@ -132,10 +132,7 @@ function saveImage(req, res){
         req.busboy.on('file', function (fieldname, file, filename) {
 
         	fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
-
-        	var coordinates = JSON.parse(fieldname);
-
-        	console.log(coordinates.lat);
+        	var coordinates = JSON.parse(fieldname); //incoming box coordinates
 
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
@@ -161,7 +158,7 @@ function saveImage(req, res){
                             
                         console.log('saved image as ' + current);
 
-                        processImage(current, res);   
+                        processImage(current, res, coordinates);   
                         
            
                     });
@@ -173,8 +170,21 @@ function saveImage(req, res){
         });
 }
 
-function processImage(id, res){
-	console.log('process '+id);
+function processImage(id, res, coordinates){
+
+
+	im("temp_img_uploads/" + id)
+	.size(function (err, size) {
+	  if (!err) {
+	    //console.log('width = ' + size.width);
+	    //console.log('height = ' + size.height);
+	    buildTiles(id,res,coordinates,size);
+	  }
+	});
+
+
+	
+
 
 
 	// //build VRT file from image pixels && location coordinates
@@ -207,6 +217,39 @@ function processImage(id, res){
 	res.send('asdf');
 
 	// IF MAP DIR ALREADY EXISTS, then DELETE AND REWRITE WITH NEW ONE
+
+
+
+}
+
+function buildTiles(id,res,coordinates,size){
+
+	console.log(size.width);
+
+	var worldID = coordinates.worldID;
+
+	var nw_pixel_lng = 0;
+	var nw_pixel_lat = 0;
+	var nw_loc_lng = coordinates.nw_loc_lng;
+	var nw_loc_lat = coordinates.nw_loc_lat;
+
+	var sw_pixel_lng = 0;
+	var sw_pixel_lat = 10000;
+	var sw_loc_lng = coordinates.sw_loc_lng;
+	var sw_loc_lat = coordinates.sw_loc_lat;
+
+	var ne_pixel_lng = 9529;
+	var ne_pixel_lat = 0;
+	var ne_loc_lng = coordinates.ne_loc_lng;
+	var ne_loc_lat = coordinates.ne_loc_lat;
+
+	var se_pixel_lng = 9529;
+	var se_pixel_lat = 10000;
+	var se_loc_lng = coordinates.se_loc_lng;
+	var se_loc_lat = coordinates.se_loc_lat;
+
+	console.log('process '+id);
+
 
 	//remove temp map file
 	fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
