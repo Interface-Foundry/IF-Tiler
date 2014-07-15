@@ -62,34 +62,34 @@ var exec = require('child_process').exec;
 // plugin here:
 
 var copyright = 'Interface Foundry PBC';
-var mapName = 'incoming';
+// var mapName = 'incoming';
 
-var nw_pixel_lng = 0;
-var nw_pixel_lat = 0;
-var nw_loc_lng = -73.99749;
-var nw_loc_lat = 40.75683;
+// var nw_pixel_lng = 0;
+// var nw_pixel_lat = 0;
+// var nw_loc_lng = -73.99749;
+// var nw_loc_lat = 40.75683;
 
-var sw_pixel_lng = 0;
-var sw_pixel_lat = 10000;
-var sw_loc_lng = -73.99749;
-var sw_loc_lat = 40.7428;
+// var sw_pixel_lng = 0;
+// var sw_pixel_lat = 10000;
+// var sw_loc_lng = -73.99749;
+// var sw_loc_lat = 40.7428;
 
-var ne_pixel_lng = 9529;
-var ne_pixel_lat = 0;
-var ne_loc_lng = -73.98472;
-var ne_loc_lat = 40.75683;
+// var ne_pixel_lng = 9529;
+// var ne_pixel_lat = 0;
+// var ne_loc_lng = -73.98472;
+// var ne_loc_lat = 40.75683;
 
-var se_pixel_lng = 9529;
-var se_pixel_lat = 10000;
-var se_loc_lng = -73.98472;
-var se_loc_lat = 40.7428;
+// var se_pixel_lng = 9529;
+// var se_pixel_lat = 10000;
+// var se_loc_lng = -73.98472;
+// var se_loc_lat = 40.7428;
 
-//generate unique temp image path hash
-var tempIMG = './tilers_tools/map_to_tiles2.png';
+// //generate unique temp image path hash
+// var tempIMG = './tilers_tools/map_to_tiles2.png';
 
-//use same name for vrt
-var tempVRT = './maps/newtesting9.vrt';
-var tempVRT2 = './maps/newtesting10.vrt';
+// //use same name for vrt
+// var tempVRT = './maps/newtesting9.vrt';
+// var tempVRT2 = './maps/newtesting10.vrt';
 
 var exec = require('child_process').exec;
 
@@ -118,6 +118,8 @@ app.post('/api/upload', function (req, res) {
 	
 
 });
+
+
 
 
 
@@ -194,8 +196,8 @@ function buildTiles(id,res,coordinatesString,size){
 
 	console.log('building tiles');
 
-	var tempVRT = './maps/newtesting9.vrt';
-var tempVRT2 = './maps/newtesting10.vrt';
+	//var tempVRT = './maps/newtesting9.vrt';
+	//var tempVRT2 = './maps/newtesting10.vrt';
 
    	coordinatesString = coordinatesString.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
 	var coordinates = JSON.parse(coordinatesString); //incoming box coordinates
@@ -252,7 +254,33 @@ var tempVRT2 = './maps/newtesting10.vrt';
 			exec('gdal2tiles.py -k -n '+worldMapVRT2+' '+__dirname+'/maps/'+worldMapVRT2, function(err3, stdout3, stderr3) {
 
 				console.log(stderr3);
-				console.log(stdout3);
+				console.log(stdout3);	
+
+				
+				var files = fs.readdirSync('./maps/maps/'+coordinates.worldID + '_warped.vrt');
+				for (var i in files) {
+				  //var definition = require('./application/models/' + files[i]).Model
+				  //if 1 or 2 number dir, then add to array
+				  console.log(files[i]);
+				}
+
+
+
+			    // var coordBox = {
+			    //     worldID: '320439d9fdf0dfdf',
+			    //     nw_loc_lng: -73.99749,
+			    //     nw_loc_lat:  40.75683,
+			    //     sw_loc_lng: -73.99749,
+			    //     sw_loc_lat:   40.7428,
+			    //     ne_loc_lng: -73.98472,
+			    //     ne_loc_lat:  40.75683,
+			    //     se_loc_lng: -73.98472,
+			    //     se_loc_lat:   40.7428
+			    // };
+
+			    // var coords_text = JSON.stringify(coordBox);
+
+
 				res.send('map '+id+' built ADD ZOOM LEVELS RETURN ');
 				//delete temp img and vrt
 
