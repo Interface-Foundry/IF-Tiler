@@ -196,6 +196,8 @@ function buildTiles(id,res,coordinatesString,size){
 
 	console.log('building tiles');
 
+	console.log(coordinatesString);
+
 	//var tempVRT = './maps/newtesting9.vrt';
 	//var tempVRT2 = './maps/newtesting10.vrt';
 
