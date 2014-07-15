@@ -198,10 +198,10 @@ function buildTiles(id,res,coordinatesString,size){
 
 	console.log(coordinatesString);
 
-	var coordinates = coordinatesString;
+	//var coordinates = coordinatesString;
 
- //   	coordinatesString = coordinatesString.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
-	// var coordinates = JSON.parse(coordinatesString); //incoming box coordinates
+   	coordinatesString = coordinatesString.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
+	var coordinates = JSON.parse(coordinatesString); //incoming box coordinates
 
 
 	//console.log(coordinates);
