@@ -262,29 +262,18 @@ function buildTiles(id,res,coordinatesString,size){
 				for (var i in files) {
 				  	if(/^\d+$/.test(files[i])) { //sort for whole numbers in files (zooms)
 				   		zoomLevels.push(files[i]);
-				   		console.log('added '+files[i]);
-
 					}
 				}
 
-				console.log(zoomLevels);
+			    var mapResponse = {
+			        mapURL: coordinates.worldID + '_warped.vrt',
+			        zooms: zoomLevels,
+			    };
 
-			    // var coordBox = {
-			    //     worldID: '320439d9fdf0dfdf',
-			    //     nw_loc_lng: -73.99749,
-			    //     nw_loc_lat:  40.75683,
-			    //     sw_loc_lng: -73.99749,
-			    //     sw_loc_lat:   40.7428,
-			    //     ne_loc_lng: -73.98472,
-			    //     ne_loc_lat:  40.75683,
-			    //     se_loc_lng: -73.98472,
-			    //     se_loc_lat:   40.7428
-			    // };
-
-			    // var coords_text = JSON.stringify(coordBox);
+			    var map_text = JSON.stringify(mapResponse);
 
 
-				res.send('map '+id+' built ADD ZOOM LEVELS RETURN ');
+				res.send(map_text);
 				//delete temp img and vrt
 
 				//remove temp map file
