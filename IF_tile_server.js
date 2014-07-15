@@ -256,15 +256,18 @@ function buildTiles(id,res,coordinatesString,size){
 				console.log(stderr3);
 				console.log(stdout3);	
 
-				
+				var zoomLevels = [];
+
 				var files = fs.readdirSync('./maps/maps/'+coordinates.worldID + '_warped.vrt');
 				for (var i in files) {
-				  //var definition = require('./application/models/' + files[i]).Model
-				  //if 1 or 2 number dir, then add to array
-				  console.log(files[i]);
+				  	if(/^\d+$/.test(files[i])) { //sort for whole numbers in files (zooms)
+				   		zoomLevels.push(files[i]);
+				   		console.log('added '+files[i]);
+
+					}
 				}
 
-
+				console.log(zoomLevels);
 
 			    // var coordBox = {
 			    //     worldID: '320439d9fdf0dfdf',
