@@ -131,7 +131,7 @@ function saveImage(req, res){
 
         req.busboy.on('file', function (fieldname, file, filename) {
 
-        	
+        	fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
 
         	var coordinates = JSON.parse(fieldname);
 
