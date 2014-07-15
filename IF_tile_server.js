@@ -191,6 +191,8 @@ function processImage(id, res, coordinates){
 
 function buildTiles(id,res,coordinates,size){
 
+	console.log('building tiles');
+
 	var mapImage = 'temp_img_uploads/' + id;
 	var worldMapVRT = coordinates.worldID;
 	var	worldMapVRT2 = coordinates.worldID + '_warped';
