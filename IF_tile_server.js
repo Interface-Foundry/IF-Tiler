@@ -196,6 +196,8 @@ function buildTiles(id,res,coordinatesString,size){
 
 	console.log('building tiles');
 
+	console.log(coordinatesString);
+
 	var coordinates = coordinatesString;
 
  //   	coordinatesString = coordinatesString.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
