@@ -131,9 +131,11 @@ function saveImage(req, res){
 
         req.busboy.on('file', function (fieldname, file, filename) {
 
-        	console.log(fieldname);
+        	
 
-        	console.log(file);
+        	var coordinates = JSON.parse(fieldname);
+
+        	console.log(coordinates);
 
             var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
             var fileType = filename.split('.').pop();
