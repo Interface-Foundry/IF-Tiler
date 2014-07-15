@@ -173,16 +173,12 @@ function saveImage(req, res){
 function processImage(id, res, coordinates){
 
 
-	im("temp_img_uploads/" + id)
-	.size(function (err, size) {
-	  if (!err) {
-	    //console.log('width = ' + size.width);
-	    //console.log('height = ' + size.height);
-	    buildTiles(id,res,coordinates,size);
-	  }
-	});
 
-
+	im.identify('temp_img_uploads/' + id, function(err, features){
+	  if (err) throw err
+	  buildTiles(id,res,coordinates,features)
+	  // { format: 'JPEG', width: 3904, height: 2622, depth: 8 }
+	})
 	
 
 
