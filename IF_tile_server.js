@@ -244,6 +244,12 @@ function buildTiles(id,res,coordinates,size){
 				res.send('map '+id+' built');
 				//delete temp img and vrt
 
+				//remove temp map file
+				fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
+			      if (err) throw err;
+			      console.log('successfully deleted '+__dirname + '/temp_img_uploads/' + id);
+			    });
+			    
 			});
 
 		});
@@ -251,11 +257,7 @@ function buildTiles(id,res,coordinates,size){
 
 	// res.send('asdf');
 
-	//remove temp map file
-	fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
-      if (err) throw err;
-      console.log('successfully deleted '+__dirname + '/temp_img_uploads/' + id);
-    });
+
 
 }
 
