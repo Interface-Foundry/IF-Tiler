@@ -208,8 +208,8 @@ function buildTiles(id,res,coordinatesString,size){
 
 	var mapImage = 'temp_img_uploads/' + id;
 
-	var worldMapVRT = './maps/'+coordinates.worldID+'.vrt';
-	var	worldMapVRT2 ='./maps/'+coordinates.worldID + '_warped.vrt';
+	var worldMapVRT = './maps/'+coordinates.localMapID+'.vrt';
+	var	worldMapVRT2 ='./maps/'+coordinates.localMapID + '_warped.vrt';
 
 	var nw_pixel_lng = 0;
 	var nw_pixel_lat = 0;
