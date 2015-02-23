@@ -259,7 +259,7 @@ function buildTiles(id,res,coordinatesString,size){
 
 				var zoomLevels = [];
 
-				var files = fs.readdirSync('./maps/maps/'+coordinates.worldID + '_warped.vrt');
+				var files = fs.readdirSync('./maps/maps/'+coordinates.localMapID + '_warped.vrt');
 				for (var i in files) {
 				  	if(/^\d+$/.test(files[i])) { //sort for whole numbers in files (zooms)
 				   		zoomLevels.push(files[i]);
@@ -267,7 +267,7 @@ function buildTiles(id,res,coordinatesString,size){
 				}
 
 			    var mapResponse = {
-			        mapURL: coordinates.worldID + '_warped.vrt',
+			        mapURL: coordinates.localMapID + '_warped.vrt',
 			        zooms: zoomLevels,
 			        worldID: coordinates.worldID
 			    };
