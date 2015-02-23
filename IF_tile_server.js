@@ -194,6 +194,8 @@ function processImage(id, res, coordinates){
 
 function buildTiles(id,res,coordinatesString,size){
 
+
+
 	console.log('building tiles');
 
 	console.log(coordinatesString);
@@ -233,61 +235,69 @@ function buildTiles(id,res,coordinatesString,size){
 
 	//console.log('process '+id);
 
+	console.log('localMapID:');
+	console.log(coordinates.localMapID);
 
+	if (coordinates.localMapID){
 
-//console.log('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '');
-	
-	//build VRT file from image pixels && location coordinates
-	exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '', function(err, stdout, stderr) {
-		// React to callback
-		console.log(stderr);
-		console.log(stdout);
+		//console.log('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '');
+		
+		//build VRT file from image pixels && location coordinates
+		exec('gdal_translate -of VRT -a_srs EPSG:4326 -gcp '+ nw_pixel_lng +' '+ nw_pixel_lat +' '+ nw_loc_lng +' '+ nw_loc_lat +' -gcp '+ sw_pixel_lng +' '+ sw_pixel_lat +' '+ sw_loc_lng +' '+ sw_loc_lat +' -gcp '+ ne_pixel_lng +' '+ ne_pixel_lat +' '+ ne_loc_lng +' '+ ne_loc_lat +' -gcp '+ se_pixel_lng +' '+ se_pixel_lat +' '+ se_loc_lng +' '+ se_loc_lat +' '+ mapImage +' '+ worldMapVRT + '', function(err, stdout, stderr) {
+			// React to callback
+			console.log(stderr);
+			console.log(stdout);
 
-		//warp VRT to earth curvature
-		exec('gdalwarp -of VRT -t_srs EPSG:4326 '+worldMapVRT+' '+worldMapVRT2+'', function(err2, stdout2, stderr2) { 
+			//warp VRT to earth curvature
+			exec('gdalwarp -of VRT -t_srs EPSG:4326 '+worldMapVRT+' '+worldMapVRT2+'', function(err2, stdout2, stderr2) { 
 
-			console.log(stderr2);
-			console.log(stdout2);
+				console.log(stderr2);
+				console.log(stdout2);
 
-			//build tiles from warped VRT 
+				//build tiles from warped VRT 
 
-			//add in -w none
-			exec('gdal2tiles.py -k -n '+worldMapVRT2+' '+__dirname+'/maps/'+worldMapVRT2, function(err3, stdout3, stderr3) {
+				//add in -w none
+				exec('gdal2tiles.py -k -n '+worldMapVRT2+' '+__dirname+'/maps/'+worldMapVRT2, function(err3, stdout3, stderr3) {
 
-				console.log(stderr3);
-				console.log(stdout3);	
+					console.log(stderr3);
+					console.log(stdout3);	
 
-				var zoomLevels = [];
+					var zoomLevels = [];
 
-				var files = fs.readdirSync('./maps/maps/'+coordinates.localMapID + '_warped.vrt');
-				for (var i in files) {
-				  	if(/^\d+$/.test(files[i])) { //sort for whole numbers in files (zooms)
-				   		zoomLevels.push(files[i]);
+					var files = fs.readdirSync('./maps/maps/'+coordinates.localMapID + '_warped.vrt');
+					for (var i in files) {
+					  	if(/^\d+$/.test(files[i])) { //sort for whole numbers in files (zooms)
+					   		zoomLevels.push(files[i]);
+						}
 					}
-				}
 
-			    var mapResponse = {
-			        mapURL: coordinates.localMapID + '_warped.vrt',
-			        zooms: zoomLevels,
-			        worldID: coordinates.worldID
-			    };
+				    var mapResponse = {
+				        mapURL: coordinates.localMapID + '_warped.vrt',
+				        zooms: zoomLevels,
+				        worldID: coordinates.worldID
+				    };
 
-			    var map_text = JSON.stringify(mapResponse);
+				    var map_text = JSON.stringify(mapResponse);
 
 
-				res.send(map_text);
-				//delete temp img and vrt
+					res.send(map_text);
+					//delete temp img and vrt
 
-				//remove temp map file
-				fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
-			      if (err) throw err;
-			      console.log('successfully deleted '+__dirname + '/temp_img_uploads/' + id);
-			    });
+					//remove temp map file
+					fs.unlink(__dirname + '/temp_img_uploads/' + id, function (err) {
+				      if (err) throw err;
+				      console.log('successfully deleted '+__dirname + '/temp_img_uploads/' + id);
+				    });
+
+				});
 
 			});
+		}); 
 
-		});
-	}); 
+	}
+
+
+
 
 	// res.send('asdf');
 
