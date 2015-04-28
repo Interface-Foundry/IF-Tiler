@@ -48,7 +48,7 @@ app.use(connectBusboy());
 
 
 var sys = require('sys')
-var exec = require('child_process').exec;
+//var exec = require('child_process').exec;
 
 // function puts(error, stdout, stderr) { sys.puts(stdout) }
 // exec("gdal_translate -of VRT -a_srs EPSG:4326 -gcp 0 0 -73.99749 40.75683 -gcp 0 10000 -73.99749 40.7428 -gcp 9529 0 -73.98472 40.75683 -gcp 9529 10000 -73.98472 40.7428 ./tilers_tools/map_to_tiles2.png ./map_vrts/newtesting2.vrt", puts, function(res){
@@ -129,48 +129,60 @@ function saveImage(req, res){
 	  //console.log(req.body);
 
       var fstream;
-        req.pipe(req.busboy);
 
-        req.busboy.on('file', function (fieldname, file, filename) {
-
-        	// fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
-        	// var coordinates = JSON.parse(fieldname); //incoming box coordinates
-
-            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-            var fileType = filename.split('.').pop();
-
-            while (1) {
+      try {
 
 
-                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
-                var fileNumber_str = fileNumber.toString(); 
-                var current = fileNumber_str + '.' + fileType;
+	        req.pipe(req.busboy);
 
-                //checking for existing file, if unique, write to dir
-                if (fs.existsSync("temp_img_uploads/" + current)) {
-                    continue; //if there are max # of files in the dir this will infinite loop...
-                } 
-                else {
-                	console.log('writing new path');
-                    var newPath = "temp_img_uploads/" + current;
+	        req.busboy.on('file', function (fieldname, file, filename) {
 
-                    fstream = fs.createWriteStream(newPath);
-                    file.pipe(fstream);
-                    fstream.on('close', function () {
-                            
-                        console.log('saved image as ' + current);
+	        	// fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
+	        	// var coordinates = JSON.parse(fieldname); //incoming box coordinates
 
-                        console.log(fieldname);
-                        processImage(current, res, fieldname);   
-                        
-           
-                    });
+	            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+	            var fileType = filename.split('.').pop();
 
-                    break;
-                }
-            }
+	            while (1) {
 
-        });
+
+	                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
+	                var fileNumber_str = fileNumber.toString(); 
+	                var current = fileNumber_str + '.' + fileType;
+
+	                //checking for existing file, if unique, write to dir
+	                if (fs.existsSync("temp_img_uploads/" + current)) {
+	                    continue; //if there are max # of files in the dir this will infinite loop...
+	                } 
+	                else {
+	                	console.log('writing new path');
+	                    var newPath = "temp_img_uploads/" + current;
+
+	                    fstream = fs.createWriteStream(newPath);
+	                    file.pipe(fstream);
+	                    fstream.on('close', function () {
+	                            
+	                        console.log('saved image as ' + current);
+
+	                        console.log(fieldname);
+	                        processImage(current, res, fieldname);   
+	                        
+	           
+	                    });
+
+	                    break;
+	                }
+	            }
+
+	        });
+
+
+      }
+      catch(err){
+      	console.log('bad map image upload ',err);
+      }
+
+  
 }
 
 function processImage(id, res, coordinates){
