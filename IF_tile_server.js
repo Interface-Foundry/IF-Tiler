@@ -132,55 +132,61 @@ function saveImage(req, res){
 
       try {
 
-
 	        req.pipe(req.busboy);
 
-	        req.busboy.on('file', function (fieldname, file, filename) {
+	        try {
 
-	        	// fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
-	        	// var coordinates = JSON.parse(fieldname); //incoming box coordinates
+		        req.busboy.on('file', function (fieldname, file, filename) {
 
-	            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	            var fileType = filename.split('.').pop();
+		        	// fieldname = fieldname.replace(/%22/g, '"'); //fixing weird angular %22 for " thing
+		        	// var coordinates = JSON.parse(fieldname); //incoming box coordinates
 
-	            while (1) {
+		            var fileName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+		            var fileType = filename.split('.').pop();
+
+		            while (1) {
 
 
-	                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
-	                var fileNumber_str = fileNumber.toString(); 
-	                var current = fileNumber_str + '.' + fileType;
+		                var fileNumber = Math.floor((Math.random()*100000000)+1); //generate random file name
+		                var fileNumber_str = fileNumber.toString(); 
+		                var current = fileNumber_str + '.' + fileType;
 
-	                //checking for existing file, if unique, write to dir
-	                if (fs.existsSync("temp_img_uploads/" + current)) {
-	                    continue; //if there are max # of files in the dir this will infinite loop...
-	                } 
-	                else {
-	                	console.log('writing new path');
-	                    var newPath = "temp_img_uploads/" + current;
+		                //checking for existing file, if unique, write to dir
+		                if (fs.existsSync("temp_img_uploads/" + current)) {
+		                    continue; //if there are max # of files in the dir this will infinite loop...
+		                } 
+		                else {
+		                	console.log('writing new path');
+		                    var newPath = "temp_img_uploads/" + current;
 
-	                    fstream = fs.createWriteStream(newPath);
-	                    file.pipe(fstream);
-	                    fstream.on('close', function () {
-	                            
-	                        console.log('saved image as ' + current);
+		                    fstream = fs.createWriteStream(newPath);
+		                    file.pipe(fstream);
+		                    fstream.on('close', function () {
+		                            
+		                        console.log('saved image as ' + current);
 
-	                        console.log(fieldname);
-	                        processImage(current, res, fieldname);   
-	                        
-	           
-	                    });
+		                        console.log(fieldname);
+		                        processImage(current, res, fieldname);   
+		                        
+		           
+		                    });
 
-	                    break;
-	                }
-	            }
+		                    break;
+		                }
+		            }
 
-	        });
+		        });
 
+
+	        }
+	        catch(err){
+      			console.log('bad map image upload ',err);
+	        }
 
       }
       catch(err){
       	console.log('bad map image upload ',err);
-      	res.send(500);
+      	//res.send(500);
       }
 
   
