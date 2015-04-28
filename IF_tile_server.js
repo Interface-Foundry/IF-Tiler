@@ -180,6 +180,7 @@ function saveImage(req, res){
       }
       catch(err){
       	console.log('bad map image upload ',err);
+      	res.send(500);
       }
 
   
